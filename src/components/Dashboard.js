@@ -7,9 +7,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 
-import Copyright from './Copyright';
 import TheAppBar from './AppBar';
 import TheSidebar from './TheSidebar';
+import TheMap from './TheMap';
 
 const mdTheme = createTheme();
 
@@ -21,7 +21,7 @@ function DashboardContent() {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <TheAppBar {...{ position: "absolute", open, toggleDrawer }} />
+                <TheAppBar {...{ position: 'absolute', open, toggleDrawer }} />
                 <TheSidebar {...{ variant: 'permanent', open, toggleDrawer }} />
                 <Box
                     component="main"
@@ -37,41 +37,8 @@ function DashboardContent() {
                 >
                     { /* Include a toolbar for spacing. Seems dumb, but that's what the example had. */}
                     <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                        backgroundColor: 'red'
-                                    }}
-                                >
-                                </Paper>
-                            </Grid>
-                            {/* Recent Deposits */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                        backgroundColor: 'blue'
-                                    }}
-                                >
-                                </Paper>
-                            </Grid>
-                            {/* Recent Orders */}
-                            <Grid item xs={12}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: 'green' }}>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Copyright sx={{ pt: 4 }} />
+                    <Container disableGutters={true}>
+                        <TheMap />
                     </Container>
                 </Box>
             </Box>
