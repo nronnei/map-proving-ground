@@ -1,8 +1,8 @@
 import { FormGroup, FormControlLabel, Switch, FormControl } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { layersStateFamily } from "../store/map";
+import { atom, useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { editLayerState, layersStateFamily } from "../store/map";
 
 // A Priori knowledge right now, to prove the concept
 const BASEMAP_OPTIONS = [
@@ -34,33 +34,55 @@ const BASEMAP_OPTIONS = [
         id: 4,
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        isVisible: false,
+        isVisible: true,
     }
 ];
 
-function LayerToggle({ layerConfig }) {
-    console.log(JSON.stringify(layerConfig))
+function LayerToggle({ layerId }) {
 
-    const [layer, setLayer] = useRecoilState(layersStateFamily(layerConfig.id));
+    const layer = useRecoilValue(layersStateFamily(layerId));
+    const setIsVisible = useSetRecoilState(editLayerState({
+        path: 'isVisible',
+        id: layerId
+    }))
 
-    useEffect(() => { setLayer(layerConfig) }, [])
-    useEffect(() => { console.log('LAYER_TOGGLE', layer, JSON.stringify(layerConfig)) }, [layer])
+    useEffect(() => {
+        console.log(layer.name, 'isVisible', layer.isVisible);
+        // console.log('LAYER_TOGGLE', layer, JSON.stringify(layerConfig))
+    }, [layer])
 
-    const toggleVisible = () => setLayer({ ...layer, isVisible: !layer.isVisible });
+    const toggleVisible = () => setIsVisible(!layer.isVisible);
 
     return (
         <FormControlLabel
-            control={<Switch value={layer.isVisible} onChange={toggleVisible} />}
+            control={<Switch checked={layer.isVisible} onChange={toggleVisible} />}
             label={layer.name}
         />
     )
 }
 
+export const layerIdsState = atom({ key: 'layerIds', default: new Set() });
+
+
 export default function StupidMapHider() {
+
+    // Right now, we need to wait for the map to actually render
+    // or the layers won't get added to the map.
+    // const layerIds = useRecoilValue(layerIdsState);
+
+    // const addLayerId = useRecoilCallback(({ set }) => (newId) => {
+    //     set(layerIdsState, (currentState) => new Set(currentState, new Set(newId)))
+    // }, []);
+    const setLayer = useRecoilCallback(({ set }) => (layerConfig) => {
+        set(layersStateFamily(layerConfig.id), layerConfig);
+    }, []);
+
+    BASEMAP_OPTIONS.forEach(setLayer);
+
     return (
         <FormControl>
             <FormGroup>
-                {BASEMAP_OPTIONS.map(layer => <LayerToggle key={layer.id} layerConfig={layer} />)}
+                {BASEMAP_OPTIONS.map(({ id }) => <LayerToggle key={id} layerId={id} />)}
             </FormGroup>
         </FormControl>
     )
