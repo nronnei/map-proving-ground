@@ -3,13 +3,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 
 import TheAppBar from './AppBar';
 import TheSidebar from './TheSidebar';
 import TheMap from './TheMap';
+import TheMapRaw from './TheMapRaw';
 
 const mdTheme = createTheme();
 
@@ -33,12 +32,15 @@ function DashboardContent() {
                         flexGrow: 1,
                         height: '100vh',
                         overflow: 'auto',
+                        p: 0,
+                        m: 0,
                     }}
                 >
                     { /* Include a toolbar for spacing. Seems dumb, but that's what the example had. */}
                     <Toolbar />
-                    <Container disableGutters={true}>
-                        <TheMap />
+                    <Container disableGutters={true} maxWidth={false}>
+                        {/* <TheMap /> */}
+                        <TheMapRaw />
                     </Container>
                 </Box>
             </Box>

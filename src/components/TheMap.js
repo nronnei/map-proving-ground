@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { mapState } from '../store';
+import { mapState } from '../store/map';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'
 
@@ -8,8 +8,8 @@ const center = [51.505, -0.09]
 const zoom = 13
 
 export default function TheMap() {
-    // const setMap = useSetRecoilState(mapState);
-    const [, setMap] = useState(null)
+    const setMap = useSetRecoilState(mapState);
+    // const [, setMap] = useState(null)
 
     return (
         <MapContainer

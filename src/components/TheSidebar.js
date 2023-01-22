@@ -4,6 +4,7 @@ import { Toolbar, Divider, IconButton } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { DRAWER_WIDTH_PX } from "../style";
+import StupidMapHider from "./StupidMapHider";
 
 const NO_FORWARD_PROPS = ['open', 'toggleDrawer'];
 const HoCOpts = {
@@ -50,6 +51,7 @@ export default function TheSidebar(props) {
                     <ChevronLeftIcon />
                 </IconButton>
             </Toolbar>
+            <StupidMapHider />
             <Divider />
         </StyledDrawer>
     )
