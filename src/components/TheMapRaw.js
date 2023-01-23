@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
 import { layerIdsState, layersStateFamily } from '../store/map';
 import 'leaflet/dist/leaflet.css'
@@ -48,6 +48,7 @@ const BASEMAP_OPTIONS = [
 
 export default function TheMap() {
 
+    const mapRef = useRef();
     // Right now, we need to wait for the map to actually render
     // or the layers won't get added to the map.
     // const [map, setMap] = useRecoilState(mapState);
@@ -62,14 +63,21 @@ export default function TheMap() {
 
     // set up map
     useEffect(() => {
-        GlobalMapService.map = L.map("map", mapParams);
+        GlobalMapService.map = L.map(mapRef.current, mapParams);
         // setMap(L.map("map", mapParams));
 
         BASEMAP_OPTIONS.forEach(l => {
             addLayerId(l.id);
             setLayer(l)
         });
-    }, [])
+    }, [mapRef])
 
-    return (<div id="map" style={mapStyles}></div>)
+    // resize map
+    useEffect(() => {
+        const resizeObserver = new ResizeObserver(() => GlobalMapService.invalidateMapSize());
+        resizeObserver.observe(mapRef.current);
+        return resizeObserver.disconnect
+    }, [mapRef]);
+
+    return (<div id="map" style={mapStyles} ref={mapRef}></div>)
 }

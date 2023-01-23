@@ -21,6 +21,11 @@ export class LeafletMapService {
         this._layers[id]?.removeFrom(this._map);
         delete this._layers[id];
     }
+
+    invalidateMapSize(optsOrBool) {
+        if (!this.map) return;
+        this._map.invalidateSize(optsOrBool);
+    }
 }
 
 export default (() => {
