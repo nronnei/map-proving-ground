@@ -1,6 +1,5 @@
 import { FormGroup, FormControlLabel, Switch, FormControl } from "@mui/material";
 import React from "react";
-import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { editLayerState, layersStateFamily, layerIdsState } from "../store/map";
 
@@ -11,12 +10,6 @@ function LayerToggle({ layerId }) {
         path: 'isVisible',
         id: layerId
     }))
-
-    useEffect(() => {
-        console.log(layer.name, 'isVisible', layer.isVisible);
-        // console.log('LAYER_TOGGLE', layer, JSON.stringify(layerConfig))
-    }, [layer])
-
     const toggleVisible = () => setIsVisible(!layer.isVisible);
 
     return (

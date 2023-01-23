@@ -7,7 +7,6 @@ import Toolbar from '@mui/material/Toolbar';
 
 import TheAppBar from './AppBar';
 import TheSidebar from './TheSidebar';
-import TheMap from './TheMap';
 import TheMapRaw from './TheMapRaw';
 
 const mdTheme = createTheme();
@@ -39,7 +38,6 @@ function DashboardContent() {
                     { /* Include a toolbar for spacing. Seems dumb, but that's what the example had. */}
                     <Toolbar />
                     <Container disableGutters={true} maxWidth={false}>
-                        {/* <TheMap /> */}
                         <TheMapRaw />
                     </Container>
                 </Box>

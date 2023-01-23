@@ -1,6 +1,6 @@
-import L from 'leaflet';
-import { atom, atomFamily, selector, selectorFamily } from 'recoil';
-import { useLeafletLayers } from '../hooks/leaflet-hooks';
+// import L from 'leaflet';
+import { atom, atomFamily, selectorFamily } from 'recoil';
+// import { useLeafletLayers } from '../hooks/leaflet-hooks';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 import produce from 'immer';
@@ -8,15 +8,15 @@ import GlobalMapService from '../services/LeafletMapService';
 
 
 
-export const mapState = atom({
-    key: 'map',
-    default: () => Promise.resolve(L.map("map", { center: [51.505, -0.09], zoom: 13 })),
-    dangerouslyAllowMutability: true,
-})
+// export const mapState = atom({
+//     key: 'map',
+//     default: () => Promise.resolve(L.map("map", { center: [51.505, -0.09], zoom: 13 })),
+//     dangerouslyAllowMutability: true,
+// })
 
 export const layerIdsState = atom({ key: 'layerIds', default: [] });
 
-const [_, { addToMap, removeFromMap }] = useLeafletLayers()
+// const [_, { addToMap, removeFromMap }] = useLeafletLayers()
 
 async function propagateLayerToMapEffect({ onSet }) {
     console.log('Running layer effect');

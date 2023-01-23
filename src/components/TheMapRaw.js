@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
-import { mapState, layerIdsState, layersStateFamily } from '../store/map';
+import { layerIdsState, layersStateFamily } from '../store/map';
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
 import GlobalMapService from '../services/LeafletMapService';
@@ -50,14 +50,14 @@ export default function TheMap() {
 
     // Right now, we need to wait for the map to actually render
     // or the layers won't get added to the map.
-    const [map, setMap] = useRecoilState(mapState);
+    // const [map, setMap] = useRecoilState(mapState);
     const addLayerId = useRecoilCallback(({ set }) => (newId) => {
         set(layerIdsState, (currentState) => Array.from(new Set([...currentState, newId])))
-    }, [map]);
+    }, []);
 
     const setLayer = useRecoilCallback(({ set }) => (layerConfig) => {
         set(layersStateFamily(layerConfig.id), layerConfig);
-    }, [map]);
+    }, []);
 
 
     // set up map
