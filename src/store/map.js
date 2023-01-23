@@ -1,31 +1,33 @@
 import L from 'leaflet';
-import { atom, atomFamily, selectorFamily } from 'recoil';
-import { useLeafletLayers } from './leaflet-hooks';
+import { atom, atomFamily, selector, selectorFamily } from 'recoil';
+import { useLeafletLayers } from '../hooks/leaflet-hooks';
 import _get from 'lodash/get';
 import _set from 'lodash/set';
 import produce from 'immer';
+import GlobalMapService from '../services/LeafletMapService';
+
+
 
 export const mapState = atom({
     key: 'map',
-    default: null,
+    default: () => Promise.resolve(L.map("map", { center: [51.505, -0.09], zoom: 13 })),
     dangerouslyAllowMutability: true,
 })
 
+export const layerIdsState = atom({ key: 'layerIds', default: [] });
+
 const [_, { addToMap, removeFromMap }] = useLeafletLayers()
 
-async function propagateLayerToMapEffect({ onSet, getPromise }) {
+async function propagateLayerToMapEffect({ onSet }) {
     console.log('Running layer effect');
-    onSet(async (layer) => {
-        const map = await getPromise(mapState);
-        console.log('onSet', map)
-        if (!map) return;
+    onSet((layer) => {
         try {
-            console.log('Inside onSet, and layer isVisible:', layer);
-            (layer.isVisible ? addToMap : removeFromMap)(layer, map);
+            if (!GlobalMapService.map) return;
+            const method = layer.isVisible ? 'addLayer' : 'removeLayer';
+            GlobalMapService[method](layer);
         } catch (error) {
             console.error(error);
         }
-        return;
     })
 }
 
