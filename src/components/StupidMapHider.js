@@ -1,7 +1,7 @@
 import { FormGroup, FormControlLabel, Switch, FormControl } from "@mui/material";
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { editLayerState, layersStateFamily, layerIdsState } from "../store/map";
+import { editLayerState, layersStateFamily, layerIdsState } from "../store";
 
 function LayerToggle({ layerId }) {
 

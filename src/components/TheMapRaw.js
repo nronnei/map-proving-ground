@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
-import { layerIdsState, layersStateFamily } from '../store/map';
+import { layerIdsState, layersStateFamily } from '../store';
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
 import GlobalMapService from '../services/LeafletMapService';
@@ -74,7 +74,7 @@ export default function TheMap() {
 
     // resize map
     useEffect(() => {
-        const resizeObserver = new ResizeObserver(() => GlobalMapService.invalidateMapSize());
+        const resizeObserver = new ResizeObserver(() => GlobalMapService.invalidateMapSize(true));
         resizeObserver.observe(mapRef.current);
         return resizeObserver.disconnect
     }, [mapRef]);
