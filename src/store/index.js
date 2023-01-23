@@ -24,12 +24,10 @@ export const editLayerState = selectorFamily({
     key: 'editLayer',
     get: ({ path, id }) => ({ get }) => {
         const layer = get(layersStateFamily(id));
-        console.log('running get', { path, id }, layer)
         return _get(layer, path);
     },
     set: ({ path, id }) => ({ get, set }, newValue) => {
         const layer = get(layersStateFamily(id));
-        console.log('running set', path, id, layer)
         const updatedLayer = produce(layer, (draft) => _set(draft, path, newValue))
         return set(layersStateFamily(id), updatedLayer);
     },

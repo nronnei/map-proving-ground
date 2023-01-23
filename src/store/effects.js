@@ -1,6 +1,8 @@
 import GlobalMapService from '../services/LeafletMapService';
-// import { useLeafletLayers } from '../hooks/leaflet-hooks';
 
+// Alternative, hook-like approach to global services. Pairs
+// well with putting the map into global state.
+// import { useLeafletLayers } from '../hooks/leaflet-hooks';
 // const [_, { addToMap, removeFromMap }] = useLeafletLayers()
 
 
