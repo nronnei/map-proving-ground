@@ -1,9 +1,9 @@
 import { useRecoilState } from "recoil";
-import { editLayerState } from "../store";
 import camelCase from 'lodash/camelCase';
+import { editLayerState } from "../store";
 
 
-const exposedProperties = [
+const EXPOSED_PROPERTIES = [
     'attribution',
     'visible',
     'name',
@@ -16,8 +16,8 @@ function createLayerAttrHook(path) {
     }
 }
 
-const layerAttrHooks = exposedProperties.reduce((hooks, path) => {
-    console.log('running hook gen')
+const layerAttrHooks = EXPOSED_PROPERTIES.reduce((hooks, path) => {
+    console.log(`running hook gen. should log ${EXPOSED_PROPERTIES.length} times.`)
     const hookName = camelCase(`useLayer-${path}`);
     hooks[hookName] = createLayerAttrHook(path);
     return hooks
@@ -26,3 +26,7 @@ const layerAttrHooks = exposedProperties.reduce((hooks, path) => {
 export function useLayerAttrHooks() {
     return layerAttrHooks;
 }
+
+// Wish I could just export this and destructure from it
+// but it doesn't seem to work that way
+export default layerAttrHooks;
