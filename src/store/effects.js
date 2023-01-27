@@ -11,7 +11,7 @@ export async function toggleLayerVisibilityEffect({ onSet }) {
     onSet((layer) => {
         try {
             if (!GlobalMapService.map) return;
-            const method = layer.isVisible ? 'addLayer' : 'removeLayer';
+            const method = layer.visible ? 'addLayer' : 'removeLayer';
             GlobalMapService[method](layer);
         } catch (error) {
             console.error(error);
