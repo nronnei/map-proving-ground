@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { useRecoilCallback, useRecoilState } from 'recoil';
-import { layerIdsState, layersStateFamily } from '../store';
+import { useRecoilCallback, useRecoilState, useSetRecoilState } from 'recoil';
+import { layerIdsState, layersStateFamily, mapCenterSelector, mapState, mapStateSelectorFamily } from '../store';
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
 import GlobalMapService from '../services/LeafletMapService';
@@ -9,7 +9,7 @@ import GlobalMapService from '../services/LeafletMapService';
 const mapStyles = {
     overflow: "hidden",
     width: "100%",
-    height: "100vh"
+    height: "calc(100vh - 64px)"
 };
 const mapParams = { center: [51.505, -0.09], zoom: 13 };
 // A Priori knowledge right now, to prove the concept
@@ -49,22 +49,44 @@ const BASEMAP_OPTIONS = [
 export default function TheMap() {
 
     const mapRef = useRef();
-    // Right now, we need to wait for the map to actually render
-    // or the layers won't get added to the map.
-    // const [map, setMap] = useRecoilState(mapState);
+    // const [_, setMap] = useRecoilState(mapState);
+
+    // Callback for updating the layer IDs array (e.g. new layer, reorder)
     const addLayerId = useRecoilCallback(({ set }) => (newId) => {
         set(layerIdsState, (currentState) => Array.from(new Set([...currentState, newId])))
     }, []);
 
+    // Callback for setting a layer in the store.
     const setLayer = useRecoilCallback(({ set }) => (layerConfig) => {
         set(layersStateFamily(layerConfig.id), layerConfig);
     }, []);
+
+    const setMapProperty = useRecoilCallback(({ set }) => ({ prop, value }) => {
+        set(mapStateSelectorFamily(prop), value);
+    }, [])
 
 
     // set up map
     useEffect(() => {
         GlobalMapService.map = L.map(mapRef.current, mapParams);
-        // setMap(L.map("map", mapParams));
+        GlobalMapService.map.whenReady(() => {
+            try {
+                GlobalMapService.map.on('moveend', () => {
+                    const center = GlobalMapService.map.getCenter();
+                    setMapProperty({ prop: 'center', value: center })
+                })
+                GlobalMapService.map.on('zoom', () => {
+                    const zoom = GlobalMapService.map.getZoom();
+                    setMapProperty({ prop: 'zoom', value: zoom });
+                })
+                GlobalMapService.map.on('click', (e) => {
+                    console.log('clicked', e)
+                    setMapProperty({ prop: 'lastClick', value: JSON.stringify(e.latlng) });
+                })
+            } catch (error) {
+                console.error('from map setup', error)
+            }
+        })
 
         BASEMAP_OPTIONS.forEach(l => {
             addLayerId(l.id);

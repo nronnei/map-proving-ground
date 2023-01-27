@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import TheAppBar from './AppBar';
 import TheSidebar from './TheSidebar';
 import TheMapRaw from './TheMapRaw';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const mdTheme = createTheme();
 
@@ -38,7 +39,21 @@ function DashboardContent() {
                     { /* Include a toolbar for spacing. Seems dumb, but that's what the example had. */}
                     <Toolbar />
                     <Container disableGutters={true} maxWidth={false}>
-                        <TheMapRaw />
+                        <ErrorBoundary
+                            onError={(error, componentStack) => console.error('we shit the bed', error, componentStack)}
+                            fallbackRender={(error, resetBoundary, componentStack) => {
+                                return (
+                                    <div>
+                                        <h1>An error occurred</h1>
+                                        <p>{error.message}</p>
+                                        <p>{componentStack}</p>
+                                        <button onClick={resetBoundary}>Try Again</button>
+                                    </div>
+                                )
+                            }}
+                        >
+                            <TheMapRaw />
+                        </ErrorBoundary>
                     </Container>
                 </Box>
             </Box>
