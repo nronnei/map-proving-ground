@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, List, ListItem, TextField } from "@mui/material";
 // import { useEditLayer } from '../hooks/use-edit-layer';
-import { useLayerAttribution } from '../hooks/use-layer-attr-hooks';
+import { useLayerAttrHooks } from '../hooks/use-layer-attr-hooks';
 
 
 export function LayerEditor({ layerId }) {
 
+    const { useLayerAttribution } = useLayerAttrHooks();
     const [attribution, setAttribution] = useLayerAttribution(layerId);
     console.log(attribution, setAttribution)
     const [localAttr, setLocalAttr] = useState(attribution || '');
