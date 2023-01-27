@@ -6,6 +6,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { DRAWER_WIDTH_PX } from "../style";
 import StupidMapHider from "./StupidMapHider";
 import { MapStateDisplay } from "./MapStateDisplay";
+import { LayerEditor } from "./LayerEditor";
 
 const NO_FORWARD_PROPS = ['open', 'toggleDrawer'];
 const HoCOpts = {
@@ -55,6 +56,7 @@ export default function TheSidebar(props) {
             <StupidMapHider />
             <Divider />
             <MapStateDisplay />
+            <LayerEditor layerId={1} />
         </StyledDrawer>
     )
 }

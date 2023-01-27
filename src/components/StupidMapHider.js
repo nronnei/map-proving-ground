@@ -1,21 +1,24 @@
-import { FormGroup, FormControlLabel, Switch, FormControl } from "@mui/material";
+import { FormGroup, FormControlLabel, Switch } from "@mui/material";
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { editLayerState, layersStateFamily, layerIdsState } from "../store";
 
 function LayerToggle({ layerId }) {
 
-    const layer = useRecoilValue(layersStateFamily(layerId));
-    const setIsVisible = useSetRecoilState(editLayerState({
+    const [isVisible, setIsVisible] = useRecoilState(editLayerState({
         path: 'isVisible',
         id: layerId
     }))
-    const toggleVisible = () => setIsVisible(!layer.isVisible);
+    const name = useRecoilValue(editLayerState({
+        path: 'name',
+        id: layerId
+    }))
+    const toggleVisible = () => setIsVisible(!isVisible);
 
     return (
         <FormControlLabel
-            control={<Switch checked={layer.isVisible} onChange={toggleVisible} />}
-            label={layer.name}
+            control={<Switch checked={isVisible} onChange={toggleVisible} />}
+            label={name}
         />
     )
 }
@@ -26,10 +29,8 @@ export default function StupidMapHider() {
     const layerIds = useRecoilValue(layerIdsState);
 
     return (
-        <FormControl>
-            <FormGroup>
-                {layerIds.map((id) => <LayerToggle key={id} layerId={id} />)}
-            </FormGroup>
-        </FormControl>
+        <FormGroup>
+            {layerIds.map((id) => <LayerToggle key={id} layerId={id} />)}
+        </FormGroup>
     )
 }
