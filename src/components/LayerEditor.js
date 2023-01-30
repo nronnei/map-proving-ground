@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, MenuItem } from "@mui/material";
 // import { useEditLayer } from '../hooks/use-edit-layer';
 import { useLayerAttrHooks } from '../hooks/use-layer-attr-hooks';
+import { useRecoilValue } from 'recoil';
+import { layerIdsState } from '../store';
 
 
-export function LayerEditor({ layerId }) {
+export function LayerForm({ layerId }) {
 
     const { useLayerAttribution } = useLayerAttrHooks();
     const [attribution, setAttribution] = useLayerAttribution(layerId);
@@ -27,4 +29,26 @@ export function LayerEditor({ layerId }) {
             />
         </Box>
     )
+}
+
+export function LayerEditor() {
+
+    const layerIds = useRecoilValue(layerIdsState);
+    const [selectedLayer, setSelectedLayer] = useState(1);
+
+    return (<Box>
+        <h2>Editing!</h2>
+        <TextField
+            id="layer-selector"
+            label="Select a Layer to Edit"
+            value={selectedLayer}
+            onChange={(e) => setSelectedLayer(e.target.value)}
+            select
+            fullWidth
+        >
+            {layerIds.map(l => <MenuItem key={l} value={l}> {l} </MenuItem>)}
+        </TextField>
+
+        {selectedLayer && <LayerForm layerId={selectedLayer}></LayerForm>}
+    </Box>)
 }

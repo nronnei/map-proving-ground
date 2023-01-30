@@ -3,7 +3,7 @@ import camelCase from 'lodash/camelCase';
 import { editLayerState } from "../store";
 
 
-const EXPOSED_PROPERTIES = [
+export const EXPOSED_PROPERTIES = [
     'attribution',
     'visible',
     'name',
