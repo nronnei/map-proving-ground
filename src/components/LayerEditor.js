@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { Box, TextField, MenuItem } from "@mui/material";
 // import { useEditLayer } from '../hooks/use-edit-layer';
 import { useLayerAttrHooks } from '../hooks/use-layer-attr-hooks';
